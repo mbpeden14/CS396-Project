@@ -1,0 +1,38 @@
+{% extends 'boards/layout/base.html' %}
+
+{% block title %}Stocks{% endblock %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item active">Stocks</li>
+{% endblock %}
+
+{% block wrapper %}
+<h2 style="padding-bottom:16px;">{% now "F jS, Y" %}</h2>
+       <table class="table table-striped">
+        <thead class="thead-dark">
+          <tr>
+            <th>Stock Name</th>
+            <th>Open Price</th>
+            <th>Close Price</th>
+            <th>High Price</th>
+            <th>Low Price</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for stock in stocks %}
+            <tr>
+              <td>
+                <a href="">{{ stock.name }}</a>
+                <small class="text-muted d-block">{{ stock.volume }} Shares</small>
+              </td>
+              <td class="align-middle">${{ stock.open_price }}</td>
+              <td class="align-middle">${{ stock.close_price }}</td>
+              <td class="align-middle">${{ stock.high_price }}</td>
+              <td class="align-middle">${{ stock.low_price }}</td>
+              <td style="text-align:center; padding-right:25px"><a href="stock_transaction/{{stock.id}}" class="btn btn-success">Buy/Sell</a></td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+{% endblock %}

@@ -1,0 +1,102 @@
+{% extends 'boards/layout/base.html' %}
+
+{% block title %}Stocks{% endblock %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item">
+    <a href="/financial_system/user_transactions_form/">User Transactions Form</a>
+</li>
+<li class="breadcrumb-item active">List User Transactions</li>
+{% endblock %}
+
+{% block wrapper %}
+    {% if prop_transactions %}
+        <div style="padding-bottom:20px">
+            <h1>Property Transactions</h1>
+            <table class="table table-striped">
+                <thead class="thead-dark">
+                <tr>
+                    <th>User</th>
+                    <th>Agent</th>
+                    <th>Price</th>
+                    <th>Shares</th>
+                    <th>Date</th>
+                    <th>Transaction Type</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for entry in prop_transactions %}
+                    <tr>
+                        <td class="align-middle">{{ entry.user }}</td>
+                        <td class="align-middle">{{ entry.agent }}</td>
+                        <td class="align-middle">{{ entry.property }}</td>
+                        <td class="align-middle">{{ entry.price }}</td>
+                        <td class="align-middle">{{ entry.date }}</td>
+                        <td class="align-middle">{{ entry.transaction_type }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+    {% if stock_transactions %}
+        <div style="padding-bottom:20px">
+            <h1>Stock Transactions</h1>
+            <table class="table table-striped">
+                <thead class="thead-dark">
+                <tr>
+                    <th>User</th>
+                    <th>Agent</th>
+                    <th>Stock</th>
+                    <th>Price</th>
+                    <th>Shares</th>
+                    <th>Date</th>
+                    <th>Transaction Type</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for entry in stock_transactions %}
+                    <tr>
+                        <td class="align-middle">{{ entry.user }}</td>
+                        <td class="align-middle">{{ entry.agent }}</td>
+                        <td class="align-middle">{{ entry.stock }}</td>
+                        <td class="align-middle">{{ entry.price }}</td>
+                        <td class="align-middle">{{ entry.shares }}</td>
+                        <td class="align-middle">{{ entry.date }}</td>
+                        <td class="align-middle">{{ entry.transaction_type }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+    {% if oth_transactions %}
+        <div>
+            <h1>Other Product Transactions</h1>
+            <table class="table table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Name</th>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Date</th>
+                        <th>Amount</th>
+                        <th>Transaction Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for entry in oth_transactions %}
+                        <tr>
+                            <td class="align-middle">{{ entry.user }}</td>
+                            <td class="align-middle">{{ entry.product }}</td>
+                            <td class="align-middle">{{ entry.price }}</td>
+                            <td class="align-middle">{{ entry.date }}</td>
+                            <td class="align-middle">{{ entry.amount }}</td>
+                            <td class="align-middle">{{ entry.transaction_type }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+{% endblock %}

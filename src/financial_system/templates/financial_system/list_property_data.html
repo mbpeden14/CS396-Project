@@ -1,0 +1,32 @@
+{% extends 'boards/layout/base.html' %}
+
+{% block title %}Stocks{% endblock %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item">
+    <a href="/financial_system/property_data_form/">Property Data Form</a>
+</li>
+<li class="breadcrumb-item active">List Property Data</li>
+{% endblock %}
+
+{% block wrapper %}
+    {% if property %}
+        <h1>Property Data for {{ property.address }}</h1>
+        <table class="table table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Price</th>
+                    <th>Agent</th>
+                    <th>Current Owner</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="align-middle">${{ property.transaction_price }}</td>
+                    <td class="align-middle">{{ property.agent }}</td>
+                    <td class="align-middle">{{ property.current_owner }}</td>
+                </tr>
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends 'boards/layout/base.html' %}
+
+{% block title %}Other Products{% endblock %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item active">Other Products</li>
+{% endblock %}
+
+{% block wrapper %}
+      <div class="mb-3">
+        <a href="/financial_system/misc_products/new_misc_product/" class="btn btn-primary">List Product for Sale</a>
+      </div>
+      
+       <table class="table table-striped">
+        <thead class="thead-dark">
+          <tr>
+            <th>Product Name</th>
+            <th>Product Type</th>
+            <th>Price</th>
+            <th>Description</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for misc_product in misc_products %}
+            <tr>
+              <td class="align-middle">{{ misc_product.name }}</td>
+              <td class="align-middle">{{ misc_product.product_type }}</td>
+              <td class="align-middle">{{ misc_product.transaction_price }}</td>
+              <td class="align-middle">{{ misc_product.description }}</td>
+              <td style="text-align:center; padding-right:30px"><a href="other_transaction/{{misc_product.id}}" class="btn btn-success">Buy</a></td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+{% endblock %}

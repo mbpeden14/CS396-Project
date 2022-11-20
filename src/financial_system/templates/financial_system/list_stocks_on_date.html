@@ -1,0 +1,38 @@
+{% extends 'boards/layout/base.html' %}
+
+{% block title %}Stocks{% endblock %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item">
+    <a href="/financial_system/stock_date_form/">Stock Date Form</a>
+</li>
+<li class="breadcrumb-item active">List Stocks</li>
+{% endblock %}
+
+{% block wrapper %}
+    {% if stock_data %}
+        {% for entry in stock_data %}
+            <h1>{{ entry.name }} Stock Data for {{ entry.date }}</h1>
+            <table class="table table-striped">
+                <thead class="thead-dark">
+                <tr>
+                    <th>Volume</th>
+                    <th>Open Price</th>
+                    <th>Close Price</th>
+                    <th>High Price</th>
+                    <th>Low Price</th>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="align-middle">{{ entry.volume }}</td>
+                        <td class="align-middle">${{ entry.open_price }}</td>
+                        <td class="align-middle">${{ entry.close_price }}</td>
+                        <td class="align-middle">${{ entry.high_price }}</td>
+                        <td class="align-middle">${{ entry.low_price }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        {% endfor %}
+    {% endif %}
+{% endblock %}

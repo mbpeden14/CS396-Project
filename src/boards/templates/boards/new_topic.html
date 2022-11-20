@@ -1,0 +1,26 @@
+{% extends 'boards/layout/base.html' %}
+
+{% block title %} New Topic - Discussion Board{% endblock %}
+
+
+{% block breadcrumb %}
+		<li class="breadcrumb-item">
+			<a href="{% url 'boards:board_index' %}">Boards</a>
+		</li>
+		<li class="breadcrumb-item active">
+			<a href="{% url 'boards:board_topics' board.pk %}">{{ board.name }}</a>
+		</li>
+		<li class="breadcrumb-item active">New topic</li>
+{% endblock %}
+
+{% block wrapper %}
+
+  <form method="post" action="{% url 'boards:new_topic' board.pk %}" novalidate="novalidate">
+    {% csrf_token %}
+      {% include 'boards/partials/_form.html' %}
+    <div style="text-align:center">
+		<button type="submit" style="width:25%;" class="btn btn-success">Post</button>
+	</div>
+  </form>
+
+{% endblock %}

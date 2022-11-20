@@ -1,0 +1,27 @@
+{% extends 'boards/layout/base.html' %}
+
+{% block title %}
+New Discussion Board
+{% endblock %}
+
+{% block breadcrumb %}
+		<li class="breadcrumb-item">
+			<a href="{% url 'boards:board_index' %}">Boards</a>
+		</li>
+		<li class="breadcrumb-item active">New Board</li>
+{% endblock %}
+
+{% block wrapper %}
+
+  <form method="post" action="/boards/newboard/" novalidate="novalidate">
+    {% csrf_token %}
+      {% include 'boards/partials/_form.html' %}
+      <div style="text-align:center">
+        <button type="submit" style="width:25%;" class="btn btn-success">Create</button>
+      </div>
+  </form>
+
+{% endblock %}
+
+
+

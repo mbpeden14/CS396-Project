@@ -1,0 +1,57 @@
+{% extends 'boards/layout/base.html' %}
+
+{% block title %}Stocks{% endblock %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item">
+    <a href="/financial_system/agent_assets_form/">Agent Assets Form</a>
+</li>
+<li class="breadcrumb-item active">List Agent Assets</li>
+{% endblock %}
+
+{% block wrapper %}
+    {% if properties %}
+        {% if agent %}<h1>Properties Managed by {{ agent.name }}</h1>{% endif %}
+        <table class="table table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Address</th>
+                    <th>Price</th>
+                    <th>Current Owner</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for entry in properties %}
+                    <tr>
+                        <td class="align-middle">{{ entry.address }}</td>
+                        <td class="align-middle">{{ entry.transaction_price }}</td>
+                        <td class="align-middle">{{ entry.current_owner }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+    {% if other %}
+        {% if agent %}<h1 style="padding-top:20px">Other Assets Managed by {{ agent.name }}</h1>{% endif %}
+        <table class="table table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Product Name</th>
+                    <th>Product Type</th>
+                    <th>Price</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for entry in other %}
+                    <tr>
+                        <td class="align-middle">{{ entry.name }}</td>
+                        <td class="align-middle">{{ entry.product_type }}</td>
+                        <td class="align-middle">{{ entry.transaction_price }}</td>
+                        <td class="align-middle">{{ entry.description }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}

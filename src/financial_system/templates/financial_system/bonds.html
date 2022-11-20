@@ -1,0 +1,34 @@
+{% extends 'boards/layout/base.html' %}
+
+{% block title %}Stocks{% endblock %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item active">Bonds</li>
+{% endblock %}
+
+{% block wrapper %}
+      <div class="mb-3">
+        <a href="/financial_system/bonds/new_bond/" class="btn btn-primary">Add New Bond</a>
+      </div>
+      
+       <table class="table table-striped">
+        <thead class="thead-dark">
+          <tr>
+            <th>Name</th>
+            <th>Issuer</th>
+            <th>Yield</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for bond in bonds %}
+            <tr>
+              <td class="align-middle">{{ bond.name }}</td>
+              <td class="align-middle">{{ bond.issuer }}</td>
+              <td class="align-middle">{{ bond.bond_yield }}%</td>
+              <td style="text-align:center; padding-right:25px"><a href="bond_transaction/{{bond.id}}" class="btn btn-success">Buy</a></td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+{% endblock %}

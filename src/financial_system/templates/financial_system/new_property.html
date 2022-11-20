@@ -1,0 +1,24 @@
+{% extends 'boards/layout/base.html' %}
+
+{% block title %}
+New Property
+{% endblock %}
+
+{% block breadcrumb %}
+		<li class="breadcrumb-item">
+			<a href="/financial_system/properties/">Properties</a>
+		</li>
+		<li class="breadcrumb-item active">New Property</li>
+{% endblock %}
+
+{% block wrapper %}
+
+  <form method="post" action="/financial_system/properties/new_property/" novalidate="novalidate">
+    {% csrf_token %}
+      {% include 'boards/partials/_form.html' %}
+      <div style="text-align:center">
+        <button type="submit" style="width:25%;" class="btn btn-success">Create</button>
+      </div>
+  </form>
+
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends 'boards/layout/base.html' %}
+
+{% block title %}
+List User Transactions
+{% endblock %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item active">User Transactions Form</li>
+{% endblock %}
+
+{% block wrapper %}
+    <form method="post" action="list_user_transactions/" novalidate="novalidate">
+        {% csrf_token %}
+        {% include 'boards/partials/_form.html' %}
+        <p style="padding-left: 8px"><i>Enter Date as YYYY-MM-DD</p></i>
+        <div style="text-align:center">
+            <button type="submit" style="width:25%;" class="btn btn-success">Search</button>
+        </div>
+      </form>
+{% endblock%}

@@ -1,0 +1,34 @@
+{% extends 'boards/layout/base.html' %}
+
+{% block title %}Stocks{% endblock %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item">
+    <a href="/financial_system/loan_ratings_form/">Bank Loan Ratings Form</a>
+</li>
+<li class="breadcrumb-item active">List Bank Loan Ratings</li>
+{% endblock %}
+
+{% block wrapper %}
+    {% if bonds %}
+        {% if issuer %}<h1>Loan Ratings for {{ issuer }}</h1>{% endif %}
+        <table class="table table-striped">
+            <thead class="thead-dark">
+            <tr>
+                <th>Rating</th>
+                <th>Name</th>
+                <th>Yield</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for entry in bonds %}
+                    <tr>
+                        <td class="align-middle">#{{ forloop.counter }}</td>
+                        <td class="align-middle">{{ entry.name }}</td>
+                        <td class="align-middle">{{ entry.bond_yield }}%</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends 'boards/layout/base.html' %}
+
+{% block title %}Stocks{% endblock %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item">
+    <a href="/financial_system/bond_data_form/">Bond Data Form</a>
+</li>
+<li class="breadcrumb-item active">List Bond Data</li>
+{% endblock %}
+
+{% block wrapper %}
+    {% if bond %}
+        <h1>Bond Data for {{ bond.name }}</h1>
+        <table class="table table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Issuer</th>
+                    <th>Name</th>
+                    <th>Yield</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="align-middle">{{ bond.issuer }}</td>
+                    <td class="align-middle">{{ bond.name }}</td>
+                    <td class="align-middle">{{ bond.bond_yield }}%</td>
+                </tr>
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}
