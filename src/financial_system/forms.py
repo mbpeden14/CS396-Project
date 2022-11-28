@@ -49,6 +49,41 @@ class OtherTransactionForm(forms.ModelForm):
         model = models.OtherTransaction
         fields = ['amount', 'user']
 
+class AddUserExpendituresForm(forms.ModelForm):
+    class Meta:
+        model = models.UserExpenditures
+        fields = [
+            'user', 
+            'food',
+            'health',
+            'entertainment',
+            'vehicle_fuel',
+            'children',
+            'travel',
+            'other',
+            'start_date',
+            'end_date'
+        ]
+
+    start_date = forms.DateField(
+        widget=forms.SelectDateWidget
+    )
+
+    end_date = forms.DateField(
+        widget=forms.SelectDateWidget
+    )
+
+class ExpenditureDateForm(forms.Form):
+    user = forms.CharField(max_length=125)
+
+    start_date = forms.DateField(
+        widget=forms.SelectDateWidget
+    )
+
+    end_date = forms.DateField(
+        widget=forms.SelectDateWidget
+    )
+
 class UserTransactionsForm(forms.Form):
     name = forms.CharField(max_length=125)
     date = forms.DateTimeField()

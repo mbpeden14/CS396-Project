@@ -1,0 +1,21 @@
+{% extends 'boards/layout/base.html' %}
+
+{% block title %}
+Add User Expenditures
+{% endblock %}
+
+{% block breadcrumb %}
+		<li class="breadcrumb-item active">Add User Expenditures</li>
+{% endblock %}
+
+{% block wrapper %}
+
+  <form method="post" action="/financial_system/add_user_expenditures/" novalidate="novalidate">
+    {% csrf_token %}
+      {% include 'boards/partials/_form.html' %}
+      <div style="text-align:center">
+        <button type="submit" style="width:25%;" class="btn btn-success">Add</button>
+      </div>
+  </form>
+
+{% endblock %}

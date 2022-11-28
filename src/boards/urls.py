@@ -109,6 +109,18 @@ urlpatterns = [
     path("financial_system/loan_ratings_form/list_loan_ratings/", 
         v3.list_loan_ratings, 
         name="list_loan_ratings"),
+        
+    path("financial_system/add_user_expenditures/", 
+        v3.add_user_expenditures, 
+        name="add_user_expenditures"),
+
+    path("financial_system/expenditure_date_form/", 
+        v3.expenditure_date_form, 
+        name="expenditure_date_form"),
+
+    path("financial_system/expenditure_date_form/list_expenditures/", 
+        v3.list_expenditures, 
+        name="list_expenditures"),
 
     path('',
         v.BoardListView.as_view(),

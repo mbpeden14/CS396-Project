@@ -9,6 +9,7 @@ class User(models.Model):
     age = models.CharField(max_length=3)
     sex = models.CharField(max_length=6)
     occupation = models.CharField(max_length=125)
+    monthly_income = models.DecimalField(max_digits=9, decimal_places=2)
 
     class Meta:
         managed = False
@@ -16,6 +17,23 @@ class User(models.Model):
 
     def __str__(self):
         return self.name
+
+class UserExpenditures(models.Model):
+    id = models.AutoField(primary_key=True)
+    user = models.ForeignKey(User, on_delete = models.CASCADE)
+    food = models.DecimalField(max_digits=7, decimal_places=2)
+    health = models.DecimalField(max_digits=7, decimal_places=2)
+    entertainment = models.DecimalField(max_digits=7, decimal_places=2)
+    vehicle_fuel = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
+    children = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
+    travel = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
+    other = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
+    start_date = models.DateField()
+    end_date = models.DateField()
+
+    def __str__(self):
+        return self.user.name + " Expenditures"
+
 
 class Agent(models.Model):
     id = models.AutoField(primary_key=True)

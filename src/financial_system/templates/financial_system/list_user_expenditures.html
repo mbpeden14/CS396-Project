@@ -1,0 +1,85 @@
+{% extends 'boards/layout/base.html' %}
+
+{% block title %}Stocks{% endblock %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item">
+    <a href="/financial_system/expenditure_date_form/">User Expenditures Form</a>
+</li>
+<li class="breadcrumb-item active">View Expenditures</li>
+{% endblock %}
+
+{% block wrapper %}
+    {% if user %}
+        <h1>Expenditures for {{ user.name }}</h1>
+
+        {% if total %}
+            {% if total > user.monthly_income %}
+                <div style="padding-top:10px; padding-bottom:10px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-exclamation-triangle" viewBox="0 0 16 16" style="color: red;">
+                        <path d="M7.938 2.016A.13.13 0 0 1 8.002 2a.13.13 0 0 1 .063.016.146.146 0 0 1 .054.057l6.857 11.667c.036.06.035.124.002.183a.163.163 0 0 1-.054.06.116.116 0 0 1-.066.017H1.146a.115.115 0 0 1-.066-.017.163.163 0 0 1-.054-.06.176.176 0 0 1 .002-.183L7.884 2.073a.147.147 0 0 1 .054-.057zm1.044-.45a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566z"/>
+                        <path d="M7.002 12a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 5.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995z"/>
+                    </svg>
+                    <b>EXPENDITURES EXCEED INCOME</b>
+                </div>
+            {% endif %}
+        {% endif %}
+
+    {% endif %}
+
+    <hr>
+
+    {% if exp_data %}
+        {% for entry in exp_data %}
+            <h2>{{ entry.start_date }} - {{ entry.end_date }}</h2>
+            <table class="table table-striped">
+                <thead class="thead-dark">
+                <tr>
+                    <th>Food</th>
+                    <th>Health</th>
+                    <th>Entertainment</th>
+
+                    {% if entry.vehicle_fuel %}
+                        <th>Vehicle Fuel</th>
+                    {% endif %}
+
+                    {% if entry.children %}
+                        <th>Children</th>
+                    {% endif %}
+
+                    {% if entry.travel %}
+                        <th>Travel</th>
+                    {% endif %}
+
+                    {% if entry.other %}
+                        <th>Other</th>
+                    {% endif %}
+                </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="align-middle">{{ entry.food }}</td>
+                        <td class="align-middle">${{ entry.health }}</td>
+                        <td class="align-middle">${{ entry.entertainment }}</td>
+
+                        {% if entry.vehicle_fuel %}
+                            <td class="align-middle">${{ entry.vehicle_fuel }}</td>
+                        {% endif %}
+
+                        {% if entry.children %}
+                            <td class="align-middle">${{ entry.children }}</td>
+                        {% endif %}
+
+                        {% if entry.travel %}
+                            <td class="align-middle">${{ entry.travel }}</td>
+                        {% endif %}
+
+                        {% if entry.other %}
+                            <td class="align-middle">${{ entry.other }}</td>
+                        {% endif %}
+                    </tr>
+                </tbody>
+            </table>
+        {% endfor %}
+    {% endif %}
+{% endblock %}

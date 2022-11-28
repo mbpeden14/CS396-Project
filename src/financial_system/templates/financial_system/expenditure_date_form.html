@@ -1,15 +1,15 @@
 {% extends 'boards/layout/base.html' %}
 
 {% block title %}
-View Bank Loan Ratings
+User Expenditures Form
 {% endblock %}
 
 {% block breadcrumb %}
-    <li class="breadcrumb-item active">Bank Loan Ratings Form</li>
+    <li class="breadcrumb-item active">User Expenditures Form</li>
 {% endblock %}
 
 {% block wrapper %}
-    <form method="post" action="list_loan_ratings/" novalidate="novalidate">
+    <form method="post" action="list_expenditures/" novalidate="novalidate">
         {% csrf_token %}
         {% include 'boards/partials/_form.html' %}
         <div style="text-align:center">

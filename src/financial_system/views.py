@@ -388,3 +388,88 @@ def list_loan_ratings(request):
 		context={"issuer":name, "bonds":bonds}
 
 		return render(request, template, context)
+
+def add_user_expenditures(request):
+	context = dict()
+	form = AddUserExpendituresForm()
+	if request.method == 'POST':
+		form = AddUserExpendituresForm(request.POST)
+
+		if form.is_valid():
+			user = form.cleaned_data["user"]
+			food = form.cleaned_data["food"]
+			health = form.cleaned_data["health"]
+			entertainment = form.cleaned_data["entertainment"]
+			vehicle_fuel = form.cleaned_data["vehicle_fuel"]
+			children = form.cleaned_data["children"]
+			travel = form.cleaned_data["travel"]
+			other = form.cleaned_data["other"]
+			start_date = form.cleaned_data["start_date"]
+			end_date = form.cleaned_data["end_date"]
+
+			ue = UserExpenditures(
+				user=user,
+				food=food,
+				health=health,
+				entertainment=entertainment,
+				vehicle_fuel=vehicle_fuel,
+				children=children,
+				travel=travel,
+				other=other,
+				start_date=start_date,
+				end_date=end_date
+			)
+
+			ue.save()
+
+			return redirect('/')
+
+		else:
+			pass
+	
+	template = 'financial_system/add_user_expenditures.html'
+	context['form'] = form
+
+	return render(request, template, context)
+
+def expenditure_date_form(request):
+	template = 'financial_system/expenditure_date_form.html'
+	form = ExpenditureDateForm()
+
+	if request.method == 'POST':
+		form = ExpenditureDateForm(data = request.POST)
+		if form.is_valid():
+			return redirect('../')
+		else:
+			pass
+
+	context = {
+	'form':form
+	}
+	return render(request,template,context)
+
+def list_expenditures(request):
+	template = 'financial_system/list_user_expenditures.html'
+
+	if request.method == 'POST':
+		user = User.objects.get(name=request.POST['user'])
+
+		start_date = request.POST['start_date_year'] + '-' + request.POST['start_date_month'] + '-' + request.POST['start_date_day']
+		end_date = request.POST['end_date_year'] + '-' + request.POST['end_date_month'] + '-' + request.POST['end_date_day']
+		
+		# exp_data = UserExpenditures.objects.filter(created_at__range=(start_date, end_date))
+		exp_data = UserExpenditures.objects.filter(user_id=user.id, start_date__gte=start_date, end_date__lte=end_date)
+
+		total = 0
+		for entry in exp_data:
+			total = total + entry.food
+			total = total + entry.health
+			total = total + entry.entertainment
+			total = total + entry.vehicle_fuel
+			total = total + entry.children
+			total = total + entry.travel
+			total = total + entry.other
+
+		context={"exp_data":exp_data, "user":user, "total": total}
+
+		return render(request, template, context)
