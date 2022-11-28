@@ -1,6 +1,6 @@
 {% extends 'boards/layout/base.html' %}
 
-{% block title %}Stocks{% endblock %}
+{% block title %}Stock on Date{% endblock %}
 
 {% block breadcrumb %}
 <li class="breadcrumb-item">
@@ -12,7 +12,7 @@
 {% block wrapper %}
     {% if stock_data %}
         {% for entry in stock_data %}
-            <h1>{{ entry.name }} Stock Data for {{ entry.date }}</h1>
+            <h1>{{ entry.stock.name }} Stock Data for {{ entry.date }}</h1>
             <table class="table table-striped">
                 <thead class="thead-dark">
                 <tr>

@@ -2,13 +2,17 @@ from django.views.generic import ListView
 from django.shortcuts import render, redirect
 from .forms import *
 from .models import *
+import matplotlib
+matplotlib.use('Agg')
+from matplotlib import pyplot as plt
+import numpy as np
 
 from financial_system.models import MiscProduct, Property, Stock
 
 # Create your views here.
 
 class StocksListView(ListView):
-	model = Stock
+	model = StockData
 	context_object_name = 'stocks'
 	template_name = 'financial_system/stocks.html'
 
@@ -77,7 +81,7 @@ def new_bond(request):
 	return render(request, template, context)
 
 def stock_transaction(request, id):
-	data = Stock.objects.get(id=id)
+	data = StockData.objects.get(stock_id=id)
 	context = dict()
 	form = StockTransactionForm()
 	if request.method == 'POST':
@@ -88,7 +92,7 @@ def stock_transaction(request, id):
 			shares = form.cleaned_data["shares"]
 			agent = form.cleaned_data["agent"]
 			user = form.cleaned_data["user"]
-			stock = data
+			stock = data.stock
 			price = data.close_price
 
 			st = StockTransaction(price=price, transaction_type=transaction_type, shares=shares, agent=agent, user=user, stock=stock)
@@ -264,9 +268,11 @@ def list_stocks_on_date(request):
 
 	if request.method == 'POST':
 		name = request.POST['name']
+		data = Stock.objects.get(name=name)
+
 		date = request.POST['date']
 		
-		stock_data = Stock.objects.filter(name=name, date=date)
+		stock_data = StockData.objects.filter(stock_id=data.id, date=date)
 
 		context={"stock_data":stock_data}
 
@@ -456,11 +462,33 @@ def list_expenditures(request):
 
 		start_date = request.POST['start_date_year'] + '-' + request.POST['start_date_month'] + '-' + request.POST['start_date_day']
 		end_date = request.POST['end_date_year'] + '-' + request.POST['end_date_month'] + '-' + request.POST['end_date_day']
-		
-		# exp_data = UserExpenditures.objects.filter(created_at__range=(start_date, end_date))
+
 		exp_data = UserExpenditures.objects.filter(user_id=user.id, start_date__gte=start_date, end_date__lte=end_date)
+		stock_transactions = StockTransaction.objects.filter(user_id=user.id, transaction_type_id=1)
+		prop_transactions = PropertyTransaction.objects.filter(user_id=user.id, transaction_type_id=1)
+		oth_transactions = OtherTransaction.objects.filter(user_id=user.id, transaction_type_id=1)
+
+		stock_expenses = 0
+		for entry in stock_transactions:
+			stock_expenses = stock_expenses + (entry.shares * entry.price)
+
+		prop_expenses = 0
+		for entry in prop_transactions:
+			prop_expenses = prop_expenses + (entry.price)
+
+		oth_expenses = 0
+		for entry in oth_transactions:
+			oth_expenses = oth_expenses + (entry.amount * entry.price)
 
 		total = 0
+		food_total = 0
+		health_total = 0
+		entertainment_total = 0
+		vehicle_fuel_total = 0
+		children_total = 0
+		travel_total = 0
+		other_total = 0
+
 		for entry in exp_data:
 			total = total + entry.food
 			total = total + entry.health
@@ -470,6 +498,67 @@ def list_expenditures(request):
 			total = total + entry.travel
 			total = total + entry.other
 
-		context={"exp_data":exp_data, "user":user, "total": total}
+			food_total = food_total + entry.food
+			health_total = health_total + entry.health
+			entertainment_total = entertainment_total + entry.entertainment
+			vehicle_fuel_total = vehicle_fuel_total + entry.vehicle_fuel
+			children_total = children_total + entry.children
+			travel_total = travel_total + entry.travel
+			other_total = other_total + entry.other
+
+		labels = [
+			'Food',
+			'Health',
+			'Entertainment'
+		]
+
+		sizes = [
+			food_total,
+			health_total,
+			entertainment_total
+		]
+
+		if(vehicle_fuel_total > 0):
+			labels.append('Vehicle Fuel')
+			sizes.append(vehicle_fuel_total)
+
+		if(children_total > 0):
+			labels.append('Children')
+			sizes.append(children_total)
+
+		if(travel_total > 0):
+			labels.append('Travel')
+			sizes.append(travel_total)
+
+		if(other_total > 0):
+			labels.append('Other General')
+			sizes.append(other_total)
+
+		if(stock_expenses > 0):
+			labels.append('Stocks')
+			sizes.append(stock_expenses)
+
+		if(prop_expenses > 0):
+			labels.append('Properties')
+			sizes.append(prop_expenses)
+
+		if(oth_expenses > 0):
+			labels.append('Other Products')
+			sizes.append(oth_expenses)
+
+		fig1, ax1 = plt.subplots()
+		ax1.pie(sizes, explode=None, labels=labels, autopct='%1.1f%%', shadow=True, startangle=90)
+		ax1.axis('equal')
+
+		plt.savefig('boards/static/boards/images/pie_chart.png', dpi=100)
+
+		context={
+			"exp_data":exp_data,
+			"user":user,
+			"total":total,
+			"stock_transactions":stock_transactions,
+			"prop_transactions":prop_transactions,
+			"oth_transactions":oth_transactions
+		}
 
 		return render(request, template, context)

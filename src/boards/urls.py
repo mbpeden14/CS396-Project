@@ -2,6 +2,8 @@ from django.urls import path
 from . import views as v
 from files import views as v2
 from financial_system import views as v3
+from django.conf import settings
+from django.conf.urls.static import static
 
 app_name = 'boards'
 
@@ -146,5 +148,4 @@ urlpatterns = [
     path('boards/<str:board_pk>/topics/<str:topic_pk>/posts/<str:post_pk>/edit/',
     	v.PostUpdateView.as_view(),
     	name='update_post'),
-
 ]

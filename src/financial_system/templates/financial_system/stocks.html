@@ -23,14 +23,14 @@
           {% for stock in stocks %}
             <tr>
               <td>
-                <a href="">{{ stock.name }}</a>
+                <a href="">{{ stock.stock.name }}</a>
                 <small class="text-muted d-block">{{ stock.volume }} Shares</small>
               </td>
               <td class="align-middle">${{ stock.open_price }}</td>
               <td class="align-middle">${{ stock.close_price }}</td>
               <td class="align-middle">${{ stock.high_price }}</td>
               <td class="align-middle">${{ stock.low_price }}</td>
-              <td style="text-align:center; padding-right:25px"><a href="stock_transaction/{{stock.id}}" class="btn btn-success">Buy/Sell</a></td>
+              <td style="text-align:center; padding-right:25px"><a href="stock_transaction/{{stock.stock.id}}" class="btn btn-success">Buy/Sell</a></td>
             </tr>
           {% endfor %}
         </tbody>

@@ -59,6 +59,13 @@ class Bank(models.Model):
 class Stock(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=125)
+
+    def __str__(self):
+        return self.name
+
+class StockData(models.Model):
+    id = models.AutoField(primary_key=True)
+    stock = models.ForeignKey(Stock, on_delete = models.CASCADE)
     open_price = models.DecimalField(max_digits=9, decimal_places=2)
     close_price = models.DecimalField(max_digits=9, decimal_places=2)
     high_price = models.DecimalField(max_digits=9, decimal_places=2)
@@ -67,7 +74,7 @@ class Stock(models.Model):
     date = models.DateField(auto_now = True)
 
     def __str__(self):
-        return self.name
+        return self.stock.name
 
 class Property(models.Model):
     id = models.AutoField(primary_key=True)
