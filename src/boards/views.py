@@ -7,9 +7,57 @@ from django.shortcuts import render,redirect,get_object_or_404
 from django.http import HttpResponse,HttpResponseRedirect
 from django.utils.decorators import method_decorator
 from django.views.generic import UpdateView,ListView
+import pandas as pd
+import numpy as np
+import time
+import datetime
+from decimal import Decimal
+from financial_system.models import StockData, Stock
 
 from .forms import NewTopicForm,PostForm, NewBoardForm
 from .models import Board,Topic,Post
+
+def scrape_stocks():
+
+	tickers = {
+		"AAPL": 2,
+		"MSFT": 3,
+		"CSCO": 4,
+		"META": 5,
+		"AMZN": 6,
+		"TSLA": 7,
+		"NFLX": 8,
+		"GOOGL": 9,
+		"HOOD": 10
+	}
+
+	for key, value in tickers.items():
+		ticker = key
+		id = value
+		period1 = int(time.mktime(datetime.datetime(2022, 11, 25, 23, 59).timetuple()))
+		period2 = int(time.mktime(datetime.datetime.now().timetuple()))
+		interval = '1d'
+
+		query_string = f'https://query1.finance.yahoo.com/v7/finance/download/{ticker}?period1={period1}&period2={period2}&interval={interval}&events=history&includeAdjustedClose=true'
+
+		data = pd.read_csv(query_string)
+		
+		date = data['Date'].tolist()[0]
+		open = data['Open'].tolist()[0]
+		high = data['High'].tolist()[0]
+		low = data['Low'].tolist()[0]
+		close = data['Close'].tolist()[0]
+		volume = data['Volume'].tolist()[0]
+
+		stock_object = Stock.objects.get(id=id)
+
+		stock_check = StockData.objects.filter(date=date, stock_id=id).exists()
+
+		if stock_check == False:
+			s = StockData(open_price=open, close_price=close, high_price=high, low_price=low, volume=volume, date=date, stock=stock_object)
+			s.save()
+
+scrape_stocks()
 
 class BoardListView(ListView):
 

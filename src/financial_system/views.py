@@ -7,6 +7,11 @@ matplotlib.use('Agg')
 from matplotlib import pyplot as plt
 import pandas as pd
 import numpy as np
+import time
+import datetime
+from decimal import Decimal
+
+
 
 from financial_system.models import MiscProduct, Property, Stock
 
@@ -118,8 +123,8 @@ def stock_transaction(request, id):
 			shares = form.cleaned_data["shares"]
 			agent = form.cleaned_data["agent"]
 			user = form.cleaned_data["user"]
-			stock = stdata.stock
-			price = stdata.close_price
+			stock = stock_object
+			price = stdata[0].close_price
 
 			st = StockTransaction(price=price, transaction_type=transaction_type, shares=shares, agent=agent, user=user, stock=stock)
 			st.save()
