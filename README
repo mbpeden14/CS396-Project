@@ -1,0 +1,15 @@
+# Matthew Peden Discussion Forum Site
+This is a website created for a computer science course project (CS 396).
+It contains a discussion forum, file management system, and a financial system with stocks, properties, bonds, etc..
+There is also data visualization with charts and graphs to help depict stock data and user expenditure.
+Stock data is dynamically scraped from Yahoo Finance.
+
+Packages Needed: 
+    - django-crispy-forms
+    - django-widget-tweaks
+    - mysqlclient
+    - pandas
+    - numpy
+    - matplotlib
+
+For MySQL create new database and name it "mysqldatabase"
