@@ -5,6 +5,7 @@ from .models import *
 import matplotlib
 matplotlib.use('Agg')
 from matplotlib import pyplot as plt
+import pandas as pd
 import numpy as np
 
 from financial_system.models import MiscProduct, Property, Stock
@@ -81,7 +82,32 @@ def new_bond(request):
 	return render(request, template, context)
 
 def stock_transaction(request, id):
-	data = StockData.objects.get(stock_id=id)
+	stdata = StockData.objects.filter(stock_id=id)
+
+	stock_object = Stock.objects.get(id=id)
+
+	dates = []
+	prices = []
+
+	for entry in stdata:
+		dates.append(entry.date)
+		prices.append(entry.close_price)
+
+
+	product = {
+		'date' : dates,
+		'demand' : prices
+	}
+
+	df = pd.DataFrame(product)
+	df.head()
+
+	plt.figure(figsize=[10,5])
+	plt.grid(True)
+	plt.plot(df['date'],df['demand'],label='data')
+	plt.legend(loc=2)
+	plt.savefig('boards/static/boards/images/stock_sma.png', dpi=100)
+
 	context = dict()
 	form = StockTransactionForm()
 	if request.method == 'POST':
@@ -92,8 +118,8 @@ def stock_transaction(request, id):
 			shares = form.cleaned_data["shares"]
 			agent = form.cleaned_data["agent"]
 			user = form.cleaned_data["user"]
-			stock = data.stock
-			price = data.close_price
+			stock = stdata.stock
+			price = stdata.close_price
 
 			st = StockTransaction(price=price, transaction_type=transaction_type, shares=shares, agent=agent, user=user, stock=stock)
 			st.save()
@@ -105,6 +131,7 @@ def stock_transaction(request, id):
 	
 	template = 'financial_system/stock_transaction.html'
 	context['form'] = form
+	context['stock'] = stock_object
 
 	return render(request, template, context)
 
@@ -468,6 +495,8 @@ def list_expenditures(request):
 		prop_transactions = PropertyTransaction.objects.filter(user_id=user.id, transaction_type_id=1)
 		oth_transactions = OtherTransaction.objects.filter(user_id=user.id, transaction_type_id=1)
 
+		total = 0
+
 		stock_expenses = 0
 		for entry in stock_transactions:
 			stock_expenses = stock_expenses + (entry.shares * entry.price)
@@ -480,7 +509,8 @@ def list_expenditures(request):
 		for entry in oth_transactions:
 			oth_expenses = oth_expenses + (entry.amount * entry.price)
 
-		total = 0
+		total = total + stock_expenses + prop_expenses + oth_expenses
+
 		food_total = 0
 		health_total = 0
 		entertainment_total = 0
@@ -488,8 +518,14 @@ def list_expenditures(request):
 		children_total = 0
 		travel_total = 0
 		other_total = 0
+		entry_total = 0
+
+		dates = []
+		entry_totals = []
 
 		for entry in exp_data:
+			entry_total = entry.food + entry.health + entry.entertainment + entry.vehicle_fuel + entry.children + entry.travel + entry.other
+
 			total = total + entry.food
 			total = total + entry.health
 			total = total + entry.entertainment
@@ -505,6 +541,9 @@ def list_expenditures(request):
 			children_total = children_total + entry.children
 			travel_total = travel_total + entry.travel
 			other_total = other_total + entry.other
+
+			dates.append(entry.start_date)
+			entry_totals.append(entry_total)
 
 		labels = [
 			'Food',
@@ -552,13 +591,44 @@ def list_expenditures(request):
 
 		plt.savefig('boards/static/boards/images/pie_chart.png', dpi=100)
 
+		product = {
+			'date' : dates,
+			'spending' : entry_totals
+		}
+
+		df = pd.DataFrame(product)
+		df.head()
+
+		plt.figure(figsize=[10,5])
+		plt.grid(True)
+		plt.plot(df['date'],df['spending'],label='SMA')
+		plt.legend(loc=2)
+		plt.xlabel('Date')
+		plt.ylabel('Expenditure ($)')
+		plt.savefig('boards/static/boards/images/exp_sma.png', dpi=100)
+
+		fig = plt.figure(figsize=(10,5))
+
+		plt.bar(dates, entry_totals, color='blue', width=5)
+
+		plt.xlabel('Date')
+		plt.ylabel('Expenditure ($)')
+		plt.savefig('boards/static/boards/images/bar_chart.png')
+
+		income = f'{user.monthly_income:,}'
+		total_formatted = f'{total:,}'
+
 		context={
 			"exp_data":exp_data,
 			"user":user,
+			"income":income,
 			"total":total,
+			"total_formatted":total_formatted,
 			"stock_transactions":stock_transactions,
 			"prop_transactions":prop_transactions,
-			"oth_transactions":oth_transactions
+			"oth_transactions":oth_transactions,
+			"dates":dates,
+			"entry_totals":entry_totals
 		}
 
 		return render(request, template, context)

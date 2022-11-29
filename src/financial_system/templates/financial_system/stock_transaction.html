@@ -1,5 +1,5 @@
 {% extends 'boards/layout/base.html' %}
-
+{% load static %}
 {% block title %}
 Stock Transaction
 {% endblock %}
@@ -12,6 +12,11 @@ Stock Transaction
 {% endblock %}
 
 {% block wrapper %}
+
+  <div style="text-align: center; padding-right:25px">
+    <h1>{{ stock.name }}</h1>
+    <img src="{% static 'boards/images/stock_sma.png' %}">
+  </div>
 
   <form method="post" action="{% for d in data %}/financial_system/stocks/stock_transaction/{{d.id}}{% endfor %}" novalidate="novalidate">
     {% csrf_token %}
